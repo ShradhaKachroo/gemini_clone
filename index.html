@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Gemini</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=send" />
+    <script src="./script.js"></script>
+</head>
+<body>
+    <header class="header">
+        <h1 class="title">Meet <span class="gemini">Gemini</span> your personal AI assistant</h1>
+    </header>
+    <div class="typing-area">
+        <form action="#" class="typing-form">
+            <div class="input-wrapper">
+                <input 
+                id="text-input"
+                type="text"
+                placeholder="enter a prompt here"
+                class="typing-input"
+                required/>
+                <button id="send-message-button" onclick="fetchResults()">
+                    <span class="material-symbols-outlined">send</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="AI-response" id="response"></div>
+    <div class="chat-area">
+        <div class="input-chat" id="user-message"></div>
+        <div class="output-chat" id="ai-response"></div>
+    </div>
+</body>
+</html>
