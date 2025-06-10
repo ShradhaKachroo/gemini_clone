@@ -1,67 +1,59 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector('.typing-form');
-    const input = document.getElementById('text-input');
+document.addEventListener("DOMContentLoaded", () => {
+    const form     = document.querySelector('.typing-form');
+    const input    = document.getElementById('text-input');
     const chatArea = document.getElementById('chat-area');
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
 
-        const userMessage = input.value.trim();
-        if (!userMessage) return;
+      appendMessage(text, 'user');
+      input.value = '';
+      const aiBubble = appendMessage('...', 'ai', true);
 
-        appendMessage(userMessage, 'input-chat');
-        input.value = '';
-
-        const loadingBubble = appendMessage("...", 'output-chat', true);
-
-        try {
-            const aiReply = await fetchApiResponse(userMessage);
-            loadingBubble.innerText = aiReply;
-            loadingBubble.style.opacity = 1;
-        } catch (error) {
-            loadingBubble.innerText = "Sorry, there was an error.";
-            loadingBubble.style.opacity = 1;
-        }
+      try {
+        const reply = await fetchApiResponse(text);
+        // sanitize & convert markdown → HTML
+        aiBubble.innerHTML = DOMPurify.sanitize(marked.parse(reply));
+        aiBubble.closest('.message').classList.remove('loading');
+      } catch {
+        aiBubble.innerText = 'Oops! Something went wrong.';
+        aiBubble.closest('.message').classList.remove('loading');
+      }
     });
 
-    function appendMessage(text, className, isLoading = false) {
-        const div = document.createElement('div');
-        div.className = className;
-        div.innerText = text;
-        if (isLoading) div.style.opacity = 0.6;
-        chatArea.appendChild(div);
-        chatArea.scrollTop = chatArea.scrollHeight;
-        return div;
+    function appendMessage(content, sender, isLoading = false) {
+      const msg = document.createElement('div');
+      msg.className = `message ${sender}` + (isLoading ? ' loading' : '');
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble';
+
+      bubble.innerText = content;
+      msg.appendChild(bubble);
+      chatArea.appendChild(msg);
+      chatArea.scrollTop = chatArea.scrollHeight;
+      return bubble;
     }
 
     async function fetchApiResponse(chat) {
-        const resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=[YOUR_API_KEY]', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [
-                    {
-                        parts: [
-                            { text: chat }
-                        ]
-                    }
-                ]
-            })
-        });
-
-        const response = await resp.json();
-        if (
-            response &&
-            response.candidates &&
-            response.candidates[0] &&
-            response.candidates[0].content &&
-            response.candidates[0].content.parts &&
-            response.candidates[0].content.parts[0] &&
-            response.candidates[0].content.parts[0].text
-        ) {
-            return response.candidates[0].content.parts[0].text;
-        } else {
-            throw new Error("Invalid response from Gemini API");
+      const res = await fetch(
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=[ YOUR_API_KEY ]',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: chat
+              }]
+            }]
+          })
         }
+      );
+      const json = await res.json();
+      if (json?.candidates?.[0]?.content?.parts?.[0]?.text)
+        return json.candidates[0].content.parts[0].text;
+      throw new Error('Invalid response');
     }
-});
+  });
