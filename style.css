@@ -75,10 +75,13 @@ body{
 
 .chat-area{
     width:600px;
+    height:400px;
     margin: 2rem auto;
     padding: 1rem;
-    background-color: #f0f0f0;
     border-radius: 10px;
+    background:#f5f5f5;
+    overflow-y: auto;
+    box-sizing:border-box;
 }
 
 .input-chat, .output-chat {
@@ -90,13 +93,11 @@ body{
 }
 
 .input-chat {
-    background-color: #dcf8c6;
     float: right;
     text-align: right;
 }
 
 .output-chat {
-    background-color: #fff;
     float: left;
     text-align: left;
 }

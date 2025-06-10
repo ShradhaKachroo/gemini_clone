@@ -1,10 +1,14 @@
-function fetchResults() {
-    let chat = document.getElementById("text-input").value;
-    document.getElementById("user-message").innerText = chat;
+const chatArea = document.getElementById("chatArea");
+
+function fetchResults(event) {
+    event.preventDefault(); // Prevent form submission
+    let chat = document.getElementById("text-input").value.trim();
+    if (!chat) return; // Do nothing if input is empty
+
+    AppendMessage("input-chat", chat); // Show user's message
     document.getElementById("text-input").value = "";
     functionfetchApiResponse(chat);
 }
-
 
 async function functionfetchApiResponse(chat) {
     try {
@@ -26,10 +30,25 @@ async function functionfetchApiResponse(chat) {
             })
         });
 
-        const response = await resp.json(); 
-        const aiReply=response.candidates[0].content.parts[0].text;
-        document.getElementById("ai-response").innerText = aiReply;
+        const response = await resp.json();
+        // Defensive: check if response has expected structure
+        const reply = response?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, no response.";
+        AppendMessage("output-chat", reply);
     } catch (error) {
         console.error("Error fetching from Gemini API:", error);
+        AppendMessage("output-chat", "Error: Could not fetch response.");
     }
 }
+
+function AppendMessage(className, chat) {
+    const msgElement = document.createElement('div');
+    msgElement.className = className;
+    msgElement.innerHTML = `<p>${chat}</p>`;
+    chatArea.appendChild(msgElement);
+    chatArea.scrollTop = chatArea.scrollHeight; // Scroll to bottom
+}
+
+// Attach event listener to the form
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector(".typing-form").addEventListener("submit", fetchResults);
+});
