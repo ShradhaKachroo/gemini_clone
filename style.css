@@ -1,70 +1,72 @@
-*{
-    margin:0;
-    padding:0;
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
 }
 
-:root{
-    --text-color:#222;
-    --subheading-color:#a0a0a0;
-    --placeholder-color:#6c6c6c;
-    --primary-color:#fff;
-    --secondary-color:#E9EEF6;
-    --secondary-hover-color:#dbelea;
+:root {
+    --text-color: #222;
+    --subheading-color: #a0a0a0;
+    --placeholder-color: #6c6c6c;
+    --primary-color: #fff;
+    --secondary-color: #E9EEF6;
+    --secondary-hover-color: #dbelea;
 }
 
-body{
+body {
     background: var(--primary-color);
 }
 
-.header{
+.header {
     width: 100%;
     text-align: center;
-    margin:auto;
+    margin: auto;
     margin-top: 25%;
 }
 
-.header .title{
-    margin:auto;
-    width:600px;
+.header .title {
+    margin: auto;
+    width: 600px;
     font-weight: 200;
     font-size: 48px;
-
 }
 
-.gemini{
-    background: linear-gradient(to right, #4285f4,#d96570 );
-    -webkit-text-fill-color:#222 ;
+.gemini {
+    background: linear-gradient(to right, #4285f4, #d96570);
+    -webkit-text-fill-color: #222;
 }
 
-.typing-area{
+.typing-area {
     width: fit-content;
     margin: auto;
-    margin-top: 100px ;
+    margin-top: 100px;
 }
-.input-area{
+
+.input-area {
     width: fit-content;
     margin: auto;
     margin-top: 200px;
 }
-.input-wrapper
-{
+
+.input-wrapper {
     border: 1px solid #222;
     padding: .5rem;
     border-radius: 30px;
 }
-.input-wrapper input{
+
+.input-wrapper input {
     width: 50vw;
     height: 30px;
     border-radius: 10px;
-    border:none;
+    border: none;
 }
-.input-wrapper input:focus{
+
+.input-wrapper input:focus {
     outline: none;
 }
 
-#send-message-button{
+#send-message-button {
     border: none;
     background-color: #efefef;
     border-radius: 50%;
@@ -73,12 +75,16 @@ body{
     cursor: pointer;
 }
 
-.chat-area{
-    width:600px;
+.chat-area {
+    width: 600px;
+    height: 400px;
     margin: 2rem auto;
     padding: 1rem;
     background-color: #f0f0f0;
     border-radius: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .input-chat, .output-chat {
@@ -87,16 +93,17 @@ body{
     max-width: 80%;
     border-radius: 10px;
     clear: both;
+    word-break: break-word;
 }
 
 .input-chat {
     background-color: #dcf8c6;
-    float: right;
+    align-self: flex-end;
     text-align: right;
 }
 
 .output-chat {
     background-color: #fff;
-    float: left;
+    align-self: flex-start;
     text-align: left;
 }
